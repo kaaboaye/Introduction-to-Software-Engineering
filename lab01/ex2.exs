@@ -1,19 +1,21 @@
 defmodule Ex2 do
+  @base 2
+
   def sum(num1, num2) do
     num =
       zip(num_to_list(num1), num_to_list(num2))
       |> Enum.reduce({[], 0}, fn
         {d1, d2}, {result, carry} ->
-          case d1 + d2 + carry do
-            0 -> {[0 | result], 0}
-            1 -> {[1 | result], 0}
-            2 -> {[0 | result], 1}
-            3 -> {[1 | result], 1}
-          end
+          sum = d1 + d2 + carry
+
+          {
+            [Integer.mod(sum, @base) | result],
+            Integer.floor_div(sum, @base)
+          }
       end)
       |> case do
         {res, 0} -> res
-        {res, 1} -> [1 | res]
+        {res, x} -> [x | res]
       end
 
     [start | num] = num
@@ -25,8 +27,7 @@ defmodule Ex2 do
     |> Integer.to_charlist()
     |> Enum.reverse()
     |> Enum.map(fn
-      48 -> 0
-      49 -> 1
+      x when (x - 48) in 0..@base -> x - 48
       _ -> raise "Bad format"
     end)
   end
