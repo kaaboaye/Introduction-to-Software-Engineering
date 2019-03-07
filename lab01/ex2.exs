@@ -27,7 +27,7 @@ defmodule Ex2 do
     |> Integer.to_charlist()
     |> Enum.reverse()
     |> Enum.map(fn
-      x when (x - 48) in 0..@base -> x - 48
+      x when x in 48..(47 + @base) -> x - 48
       _ -> raise "Bad format"
     end)
   end
